@@ -1,0 +1,21 @@
+{
+  "name": "marp-theme",
+  "version": "1.0.0",
+  "description": "Custom Marp theme for presentations",
+  "scripts": {
+    "build": "marp --theme-set themes/custom-theme.css --html --allow-local-files sample-slide.md -o sample-slide.html",
+    "serve": "marp --theme-set themes/custom-theme.css --html --allow-local-files --server .",
+    "watch": "marp --theme-set themes/custom-theme.css --html --allow-local-files --watch sample-slide.md -o sample-slide.html"
+  },
+  "keywords": [
+    "marp",
+    "theme",
+    "presentation",
+    "markdown"
+  ],
+  "devDependencies": {
+    "@marp-team/marp-cli": "^3.4.0"
+  },
+  "author": "",
+  "license": "MIT"
+}
