@@ -5,13 +5,15 @@
  * @auto-scaling true
  */
 
+ @import 'default';
+
 :root {
   /* Background colors */
   --bg-main: white;
   --bg-title-slide: linear-gradient(135deg, #3b82f6, #2563eb);
   --bg-section-slide: #f3f4f6;
   --bg-code-inline: #f3f4f6;
-  --bg-code-block: #1f2937;
+  --bg-code-block: #e1e1e1;
   --bg-table-header: #f3f4f6;
 
   /* Text colors */
@@ -22,7 +24,7 @@
   --text-title-h2: #1f2937;
   --text-title-subtitle: #f3f4f6;
   --text-section-title: #2563eb;
-  --text-code-block: #f3f4f6;
+  --text-code-block: #1f2937;
   --text-blockquote: #4b5563;
   --text-link: #2563eb;
 
@@ -33,6 +35,7 @@
   /* Border colors */
   --border-table: #d1d5db;
   --border-blockquote: #3b82f6;
+  --border-header: #666;
   
   --font-size-title: 3rem;
   --font-size-subtitle: 2rem;
@@ -46,6 +49,9 @@
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
+
+  /* margin and padding */
+  --section-padding: 60px;
 }
 
 section {
@@ -54,9 +60,22 @@ section {
   line-height: var(--line-height-normal);
   color: var(--text-primary);
   background: var(--bg-main);
-  padding: 60px;
+  padding: var(--section-padding);
   width: 1280px;
   height: 720px;
+}
+
+section::after {
+  position: absolute;
+  top: 0px;
+  right: calc(var(--section-padding) - 20px);
+  height: var(--section-padding);
+  display: flex;
+  align-items: center;
+  padding: 0;
+  font-size: var(--font-size-small);
+  color: var(--text-muted);
+  margin: 0;
 }
 
 /* Headers */
@@ -66,6 +85,29 @@ h1 {
   color: var(--text-title-h1);
   margin-bottom: 1.5rem;
   line-height: var(--line-height-tight);
+}
+
+/* Page header style for h1 directly under section without class */
+section:not([class]) {
+  position: relative;
+}
+
+section:not([class]) > h1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: var(--section-padding);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 var(--section-padding);
+  border-bottom: 2px solid var(--border-header);
+  font-size: var(--font-size-subtitle);
+  font-weight: 800;
+  color: var(--text-title-h1);
+  text-align: left;
 }
 
 h2 {
@@ -179,7 +221,7 @@ code {
   font-size: 0.875rem;
 }
 
-pre {
+:is(pre, marp-pre) {
   background: var(--bg-code-block);
   color: var(--text-code-block);
   padding: 1.5rem;
