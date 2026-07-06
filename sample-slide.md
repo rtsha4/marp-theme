@@ -1,13 +1,13 @@
 ---
 marp: true
-theme: custom-theme
+theme: azulite
 size: 16:9
 paginate: true
 ---
 
 <!-- _class: title -->
 
-# Marp Custom Theme
+# Azulite
 
 ## サンプルプレゼンテーション
 

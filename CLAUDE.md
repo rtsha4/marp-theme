@@ -9,7 +9,7 @@ This is a custom Marp theme repository. Marp is a markdown presentation ecosyste
 ```
 marp-theme/
 ├── themes/
-│   └── custom-theme.css    # Main theme CSS file
+│   └── azulite.css         # Main theme CSS file
 ├── sample-slide.md         # Example presentation
 ├── package.json            # Dependencies and scripts
 └── README.md              # Project documentation
@@ -22,13 +22,13 @@ marp-theme/
 - `bun run watch`: Watch for changes and rebuild automatically
 
 ## Theme Development
-- Main theme file: `themes/custom-theme.css`
+- Main theme file: `themes/azulite.css`
 - Uses CSS custom properties for consistent styling
 - Supports multiple slide layouts: title, section, columns, align-center
 - Color classes available: text-blue, text-red, text-gray
 
 ## Creating Presentations
 - Use `sample-slide.md` as a template
-- Set theme in frontmatter: `theme: custom-theme`
+- Set theme in frontmatter: `theme: azulite`
 - Available slide classes: title, section, columns, align-center
 - Supports standard Markdown with enhanced styling
