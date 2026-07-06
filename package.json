@@ -5,7 +5,8 @@
   "scripts": {
     "build": "marp --theme-set themes/azulite.css --html --allow-local-files sample-slide.md -o sample-slide.html",
     "serve": "marp --theme-set themes/azulite.css --html --allow-local-files --server .",
-    "watch": "marp --theme-set themes/azulite.css --html --allow-local-files --watch sample-slide.md -o sample-slide.html"
+    "watch": "marp --theme-set themes/azulite.css --html --allow-local-files --watch sample-slide.md -o sample-slide.html",
+    "preview": "bun run scripts/preview-server.js"
   },
   "keywords": [
     "marp",
