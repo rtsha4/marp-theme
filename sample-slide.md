@@ -49,9 +49,7 @@ hello('Marp');
 
 <!-- _class: columns -->
 
-## 2カラムレイアウト
-
-<div class="columns">
+# カラムレイアウト
 
 ### 左カラム
 - ポイント1
@@ -62,8 +60,6 @@ hello('Marp');
 - 特徴A
 - 特徴B
 - 特徴C
-
-</div>
 
 ---
 

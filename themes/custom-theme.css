@@ -63,6 +63,7 @@ section {
   padding: var(--section-padding);
   width: 1280px;
   height: 720px;
+  justify-content: flex-start;
 }
 
 section::after {
@@ -88,11 +89,12 @@ h1 {
 }
 
 /* Page header style for h1 directly under section without class */
-section:not([class]) {
+section:not(.title, .section) {
   position: relative;
+  border-bottom: solid 4px var(--accent-blue);
 }
 
-section:not([class]) > h1 {
+section:not(.title, .section, .align-center) > h1 {
   position: absolute;
   top: 0;
   left: 0;
@@ -170,7 +172,7 @@ section.section h1 {
 }
 
 /* Text Alignment */
-.align-center {
+section.align-center {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -280,17 +282,31 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Column Layout */
-.columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
+/* Column Layout: mark each column with a "### heading" — no wrapper HTML needed */
+section.columns {
+  display: block;
+  column-count: 2;
+  column-gap: 2rem;
+  column-fill: auto;
+  overflow: hidden;
 }
 
-.columns-3 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1.5rem;
-  align-items: start;
+section.columns.columns-3 {
+  column-count: 3;
+  column-gap: 1.5rem;
+}
+
+section.columns h3 {
+  break-before: column;
+  break-inside: avoid;
+}
+
+section.columns h3:first-of-type {
+  break-before: avoid;
+}
+
+section.columns ul,
+section.columns ol,
+section.columns p {
+  break-inside: avoid;
 }
