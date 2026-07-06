@@ -191,6 +191,17 @@ section.align-center {
   text-align: right;
 }
 
+/* Emphasis: *text* renders as accent-colored text instead of italic */
+em {
+  color: var(--accent-blue);
+  font-style: normal;
+}
+
+/* On the blue gradient title slide, accent-blue text would blend into the background */
+section.title em {
+  color: inherit;
+}
+
 /* Color Classes */
 .text-blue {
   color: var(--accent-blue);
