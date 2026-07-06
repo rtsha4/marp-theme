@@ -7,7 +7,7 @@
 
  @import 'default';
 
-:root {
+section {
   /* Background colors */
   --bg-main: white;
   --bg-title-slide: linear-gradient(135deg, #3b82f6, #2563eb);
