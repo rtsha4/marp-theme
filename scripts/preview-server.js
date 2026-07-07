@@ -2,24 +2,41 @@ import { mkdtemp, readFile, writeFile, rm } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { load as loadYaml, dump as dumpYaml, FAILSAFE_SCHEMA } from 'js-yaml'
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..')
 const marpBin = join(rootDir, 'node_modules/.bin/marp')
 const themePath = join(rootDir, 'themes/azulite.css')
 
+// A `---`/`---` block only counts as real frontmatter if it actually parses
+// as a YAML mapping — the same check marpit itself uses — so plain-text
+// content between two horizontal rules isn't mistaken for frontmatter, while
+// real-world YAML (e.g. Obsidian's `tags:` lists) is still recognized.
+// `json: true` makes duplicate keys overwrite instead of throwing, matching
+// how a lenient YAML consumer (and Obsidian itself) would read such a file.
+function parseFrontmatter(text) {
+  try {
+    const obj = loadYaml(text, { schema: FAILSAFE_SCHEMA, json: true })
+    return obj !== null && typeof obj === 'object' && !Array.isArray(obj) ? obj : null
+  } catch {
+    return null
+  }
+}
+
 // Force marp:true + theme:azulite regardless of what the picked file declares,
 // since the whole point of this tool is previewing content against this theme.
+// Editing the parsed object (rather than pattern-matching lines of text) means
+// a `marp:`/`theme:`-looking line inside an unrelated block-scalar value can't
+// be mistaken for the real directive and stripped by accident.
 function withAzuliteFrontmatter(markdown) {
   const fm = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
-  const fmLines = fm ? fm[1].split(/\r?\n/) : []
-  // A `---`/`---` pair only counts as real frontmatter if every line inside
-  // looks like `key: value` — otherwise it's just a markdown horizontal rule
-  // that happens to appear twice near the top of the file.
-  const looksLikeYaml = fm && fmLines.every((line) => line.trim() === '' || /^[\w.-]+\s*:/.test(line))
+  const parsed = fm && parseFrontmatter(fm[1])
 
-  if (looksLikeYaml) {
-    const rest = fmLines.filter((line) => !/^\s*(marp|theme)\s*:/i.test(line)).join('\n')
-    return `---\nmarp: true\ntheme: azulite\n${rest}\n---\n${markdown.slice(fm[0].length)}`
+  if (parsed) {
+    delete parsed.marp
+    delete parsed.theme
+    const rest = Object.keys(parsed).length > 0 ? `${dumpYaml(parsed, { schema: FAILSAFE_SCHEMA }).trimEnd()}\n` : ''
+    return `---\nmarp: true\ntheme: azulite\n${rest}---\n${markdown.slice(fm[0].length)}`
   }
   return `---\nmarp: true\ntheme: azulite\n---\n\n${markdown}`
 }
