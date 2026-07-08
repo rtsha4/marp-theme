@@ -35,9 +35,14 @@ function withAzuliteFrontmatter(markdown) {
   if (parsed) {
     delete parsed.marp
     delete parsed.theme
-    // Dump with the default (not failsafe) schema: an empty property like
-    // Obsidian's `tags:` loads as a real `null`, which FAILSAFE_SCHEMA has no
-    // type resolver to write back out.
+    // Drop keys with no value (e.g. Obsidian leaves `header:`/`tags:` empty)
+    // instead of writing them back as `key: null` — marpit's directive
+    // parser reads YAML with FAILSAFE_SCHEMA, which never treats the text
+    // "null" as empty, so a directive like `header: null` would render the
+    // literal word "null" on every slide instead of showing nothing.
+    for (const key of Object.keys(parsed)) {
+      if (parsed[key] === null) delete parsed[key]
+    }
     const rest = Object.keys(parsed).length > 0 ? `${dumpYaml(parsed).trimEnd()}\n` : ''
     return `---\nmarp: true\ntheme: azulite\n${rest}---\n${markdown.slice(fm[0].length)}`
   }
