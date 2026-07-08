@@ -35,7 +35,10 @@ function withAzuliteFrontmatter(markdown) {
   if (parsed) {
     delete parsed.marp
     delete parsed.theme
-    const rest = Object.keys(parsed).length > 0 ? `${dumpYaml(parsed, { schema: FAILSAFE_SCHEMA }).trimEnd()}\n` : ''
+    // Dump with the default (not failsafe) schema: an empty property like
+    // Obsidian's `tags:` loads as a real `null`, which FAILSAFE_SCHEMA has no
+    // type resolver to write back out.
+    const rest = Object.keys(parsed).length > 0 ? `${dumpYaml(parsed).trimEnd()}\n` : ''
     return `---\nmarp: true\ntheme: azulite\n${rest}---\n${markdown.slice(fm[0].length)}`
   }
   return `---\nmarp: true\ntheme: azulite\n---\n\n${markdown}`
