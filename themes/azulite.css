@@ -35,8 +35,7 @@ section {
   /* Border colors */
   --border-table: #d1d5db;
   --border-blockquote: #3b82f6;
-  --border-header: #666;
-  
+
   --font-size-title: 3rem;
   --font-size-subtitle: 2rem;
   --font-size-h1: 2.5rem;
@@ -91,7 +90,7 @@ h1 {
 /* Page header style for h1 directly under section without class */
 section:not(.title, .section) {
   position: relative;
-  border-bottom: solid 4px var(--accent-blue);
+  border-bottom: solid 8px var(--accent-blue);
 }
 
 section:not(.title, .section, .align-center) > h1 {
@@ -101,15 +100,24 @@ section:not(.title, .section, .align-center) > h1 {
   right: 0;
   width: 100%;
   height: var(--section-padding);
+  line-height: var(--section-padding);
   margin: 0;
-  display: flex;
-  align-items: center;
-  padding: 0 0 0 var(--section-padding);
-  border-bottom: 2px solid var(--border-header);
+  box-sizing: border-box;
+  padding: 0 calc(var(--section-padding) + 40px) 0 var(--section-padding);
+  background: var(--accent-blue);
   font-size: var(--font-size-subtitle);
   font-weight: 800;
-  color: var(--text-title-h1);
+  color: white;
   text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Keep the page number legible against the new blue header bar
+   (only slides that actually have the h1 header get a blue band) */
+section:not(.title, .section, .align-center):has(> h1)::after {
+  color: white;
 }
 
 h2 {
