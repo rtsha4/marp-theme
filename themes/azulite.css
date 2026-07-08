@@ -103,7 +103,7 @@ section:not(.title, .section, .align-center) > h1 {
   line-height: var(--section-padding);
   margin: 0;
   box-sizing: border-box;
-  padding: 0 calc(var(--section-padding) + 40px) 0 var(--section-padding);
+  padding: 0 300px 0 var(--section-padding);
   background: var(--accent-blue);
   font-size: var(--font-size-subtitle);
   font-weight: 800;
@@ -118,6 +118,28 @@ section:not(.title, .section, .align-center) > h1 {
    (only slides that actually have the h1 header get a blue band) */
 section:not(.title, .section, .align-center):has(> h1)::after {
   color: white;
+}
+
+/* Marp's own `header:` directive is a sibling of h1 painted before it, so
+   the opaque h1 bar was hiding it entirely. Float it on top of that same
+   bar instead of leaving it to collide with the (unstyled) default theme
+   position. */
+section:not(.title, .section, .align-center):has(> h1) > header {
+  position: absolute;
+  top: 0;
+  left: auto;
+  right: calc(var(--section-padding) + 50px);
+  width: 180px;
+  height: var(--section-padding);
+  line-height: var(--section-padding);
+  margin: 0;
+  z-index: 1;
+  color: white;
+  font-size: var(--font-size-small);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: right;
 }
 
 h2 {
