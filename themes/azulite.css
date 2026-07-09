@@ -103,7 +103,7 @@ section:not(.title, .section, .align-center) > h1 {
   line-height: var(--section-padding);
   margin: 0;
   box-sizing: border-box;
-  padding: 0 300px 0 var(--section-padding);
+  padding: 0 calc(var(--section-padding) + 40px) 0 var(--section-padding);
   background: var(--accent-blue);
   font-size: var(--font-size-subtitle);
   font-weight: 800;
@@ -114,32 +114,60 @@ section:not(.title, .section, .align-center) > h1 {
   text-overflow: ellipsis;
 }
 
-/* Keep the page number legible against the new blue header bar
-   (only slides that actually have the h1 header get a blue band) */
-section:not(.title, .section, .align-center):has(> h1)::after {
+/* Keep the page number legible against the blue h1 bar, unless a header:
+   strip (below) already pushed that bar down and takes the top spot itself */
+section:not(.title, .section, .align-center):has(> h1):not(:has(> header))::after {
   color: white;
 }
 
-/* Marp's own `header:` directive is a sibling of h1 painted before it, so
-   the opaque h1 bar was hiding it entirely. Float it on top of that same
-   bar instead of leaving it to collide with the (unstyled) default theme
-   position. */
-section:not(.title, .section, .align-center):has(> h1) > header {
+/* Marp's `header:` directive gets its own fixed strip at the very top of
+   every slide, kept deliberately independent of whatever heading level (or
+   no heading at all) the slide's body uses — the boundary this draws is
+   between "content inserted by the header: directive" and "everything else",
+   not between title styles. */
+section:not(.title, .section) > header {
   position: absolute;
   top: 0;
-  left: auto;
-  right: calc(var(--section-padding) + 50px);
-  width: 180px;
+  left: 0;
+  right: 0;
+  width: 100%;
   height: var(--section-padding);
   line-height: var(--section-padding);
   margin: 0;
-  z-index: 1;
-  color: white;
+  box-sizing: border-box;
+  padding: 0 var(--section-padding);
+  background: var(--bg-section-slide);
+  border-bottom: 2px solid var(--accent-blue);
   font-size: var(--font-size-small);
+  color: var(--text-secondary);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  text-align: right;
+}
+
+/* When both a header: strip and an h1 page-title bar are present, stack the
+   h1 bar below the header strip instead of letting them overlap. */
+section:not(.title, .section, .align-center):has(> header) > h1 {
+  top: var(--section-padding);
+}
+
+/* The header: strip (and the h1 bar stacked under it) are absolutely
+   positioned and don't push normal-flow content down on their own, so widen
+   the section's own top padding to match — plus a bit of breathing room
+   instead of butting content right up against the bar(s) below. */
+section:not(.title, .section):has(> header) {
+  padding-top: calc(var(--section-padding) + 24px);
+}
+
+section:not(.title, .section, .align-center):has(> header):has(> h1) {
+  padding-top: calc(var(--section-padding) * 2 + 24px);
+}
+
+/* .align-center centers its content by flex justify-content, so padding-top
+   alone would pull that centered content down off true-center — match it
+   with the same padding-bottom increase to keep it symmetric. */
+section.align-center:has(> header) {
+  padding-bottom: calc(var(--section-padding) + 24px);
 }
 
 h2 {
