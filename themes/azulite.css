@@ -155,7 +155,9 @@ section:not(.title, .section, .align-center):has(> header) > h1 {
 /* The header: strip (and the h1 bar stacked under it) are absolutely
    positioned and don't push normal-flow content down on their own, so widen
    the section's own top padding to match — plus a bit of breathing room
-   instead of butting content right up against the bar(s) below. */
+   instead of butting content right up against the bar(s) below. Higher
+   specificity than section.columns's own padding-top (below), so a .columns
+   slide with a header:/h1 bar gets this value instead of the two stacking. */
 section:not(.title, .section):has(> header) {
   padding-top: calc(var(--section-padding) + 24px);
 }
@@ -359,6 +361,15 @@ section.columns {
   column-gap: 2rem;
   column-fill: auto;
   overflow: hidden;
+  /* Column headings force their own margin-top to 0 below (needed so every
+     column lines up, see that rule's comment) — restore breathing room
+     between whatever's above (a header:/h1 bar, or just the slide's own top
+     edge) and the columns' content here instead, so it isn't lost. When a
+     header:/h1 bar is also present, the higher-specificity padding-top
+     rule(s) near those bars (search for ":has(> header)") override this one
+     outright rather than stacking with it — they already account for their
+     own bar(s) plus the same spacing. */
+  padding-top: calc(var(--section-padding) + 24px);
 }
 
 section.columns.columns-3 {
@@ -369,6 +380,12 @@ section.columns.columns-3 {
 section.columns h3 {
   break-before: column;
   break-inside: avoid;
+  /* marp-core resets margin-top on the section's :first-child, so only the
+     very first heading sat flush at the top — every later column's heading
+     starts a forced break instead, which keeps its own margin-top, so it
+     looked lower than the first. Zero it everywhere so every column's
+     heading starts at the same height regardless of which one is first. */
+  margin-top: 0;
 }
 
 section.columns h3:first-of-type {
