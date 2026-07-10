@@ -140,6 +140,7 @@ section:not(.title, .section) > header {
   border-bottom: 2px solid var(--accent-blue);
   font-size: var(--font-size-small);
   color: var(--text-secondary);
+  text-align: left;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
